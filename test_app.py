@@ -39,7 +39,7 @@ def test_create_task(client):
 
 def test_delete_task(client):
     """
-    Test the deletion of a task by title.
+    Test the deletion of a task.
     """
     client.post('/tasks', json={'title': 'To be deleted'})
     assert Task.query.count() == 1
