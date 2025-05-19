@@ -10,14 +10,17 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Unique identifier for each task
     title = db.Column(db.String(80), nullable=False)  # Title of the task
     completed = db.Column(db.Boolean, default=False)  # Completion status
-
+    
     @classmethod
+    '''
     def find_by_title(cls, title):
         """
         Class method to find a task by its title.
         """
         return cls.query.filter_by(title=title).first()
-
+    Made initially before figuring out a more optimized way to delete.
+    Could still be useful in the future./
+    '''
     def to_dict(self):
         """
         Convert the Task object into a dictionary for JSON serialization.
@@ -56,12 +59,12 @@ def create_app():
         tasks = Task.query.all()
         return jsonify([task.to_dict() for task in tasks])
 
-    @app.route('/tasks/title/<string:title>', methods=['DELETE'])
+    @app.route('/tasks/<int:task_id>', methods=['DELETE'])
     def delete_task(title):
         """
-        Endpoint to delete a task by its title.
+        Endpoint to delete a task.
         """
-        task = Task.find_by_title(title)
+        task = Task.query.get_or_404(task_id)
         if not task:
             return jsonify({'error': 'Task not found'}), 404
 
